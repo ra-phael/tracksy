@@ -5,7 +5,7 @@ const reducers = (state = {filters: []}, action) => {
       case 'FILTER_UPDATE': 
         return { 
             ...state,
-            filters: action.payload
+            filters: Object.assign({}, state.filters, action.payload)
         }
       default : return state;
     }
