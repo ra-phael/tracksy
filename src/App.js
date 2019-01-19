@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './App.sass';
 import { 
   Navbar,
@@ -8,49 +9,46 @@ import {
   NavLink,
   Button,
   Card,
-  CardHeader,
   CardTitle,
   CardSubtitle,
-  CardBody,
-  CustomInput,
-  Collapse
  } from 'reactstrap';
 
+import Filter from './components/Filter';
 
 const TEST_DATA = [
   {
-    brand: 'Louis Vuitton',
-    brandHandle: 'louis-vuitton',
+    brandDisplayName: 'Louis Vuitton',
+    brand: 'louis-vuitton',
     name: 'Palms Springs Backpack',
     category: 'hand-bags',
   },
   {
-    brand: 'Louis Vuitton',
-    brandHandle: 'louis-vuitton',
+    brandDisplayName: 'Louis Vuitton',
+    brand: 'louis-vuitton',
     name: 'Montsouris Backpack',
     category: 'hand-bags',
   },
   {
-    brand: 'Chanel',
-    brandHandle: 'chanel',
+    brandDisplayName: 'Chanel',
+    brand: 'chanel',
     name: 'Jumbo Hand Bag',
     category: 'hand-bags',
   },
   {
-    brand: 'Chanel',
-    brandHandle: 'chanel',
+    brandDisplayName: 'Chanel',
+    brand: 'chanel',
     name: 'Camélia Necklace',
     category: 'jewelry',
   },
   {
-    brand: 'Hermès',
-    brandHandle: 'hermes',
+    brandDisplayName: 'Hermès',
+    brand: 'hermes',
     name: 'Clic Clac Bracelet',
     category: 'jewelry',
   },
   {
-    brand: 'Louboutin',
-    brandHandle: 'louboutin',
+    brandDisplayName: 'Louboutin',
+    brand: 'louboutin',
     name: 'Pigalle',
     category: 'shoes',
   }
@@ -58,45 +56,52 @@ const TEST_DATA = [
 
 const SEARCH_FILTERS = [
   {
-  label: 'Category',
+  displayName: 'Category',
+  label: 'category',
   options: [
     {
       displayName: 'Hand Bags',
-      optionHandle: 'hand-bags'
+      option: 'hand-bags'
     },
     {
       displayName: 'Jewelry',
-      optionHandle: 'jewelry'
+      option: 'jewelry'
     },
     {
       displayName: 'Shoes',
-      optionHandle: 'shoes'
+      option: 'shoes'
     }
   ]},
   {
-  label: 'Designer',
+  displayName: 'Designers',
+  label: 'brand',
   options: [
     {
       displayName: 'Louis Vuitton',
-      optionHandle: 'louis-vuitton'
+      option: 'louis-vuitton'
     },
     {
       displayName: 'Hermès',
-      optionHandle: 'hermes'
+      option: 'hermes'
     },
     {
       displayName: 'Chanel',
-      optionHandle: 'chanel'
+      option: 'chanel'
     }
   ]},
-
 ]
+
+const TEST_FILTER = {
+  'category' : ['jewelry'],
+  'brandHandle' : []
+}
+
 
 const ItemCard = ({ item }) => (
   <Card className="my-2">
     <div className="row align-items-center p-2">
       <div className="col-8 align-items-center text-left">
-        <CardSubtitle>{ item.brand }</CardSubtitle>
+        <CardSubtitle>{ item.brandDisplayName }</CardSubtitle>
         <CardTitle tag="h5">{ item.name }</CardTitle>
       </div>
       <div className="col-4">
@@ -107,8 +112,21 @@ const ItemCard = ({ item }) => (
 );
 
 
-const ItemList = ({ list }) =>
+const ItemList = ({ list, activeFilters}) =>
   list
+  .filter((item) => {
+     
+    return Object.keys(activeFilters).every(filter => {
+
+      if(!activeFilters[filter].length) {
+        return true
+      }
+      // console.log(`${item.name} is evaluated against ${TEST_FILTER[filter]}`);
+      // console.log('evaluation: ', TEST_FILTER[filter].includes(item[filter]));
+      return activeFilters[filter].includes(item[filter])
+    })
+
+  })
   .map( item => <ItemCard item={item} />)
 
 
@@ -123,59 +141,10 @@ const FilterList = ({ list }) =>
   </div>
 
 
-class Filter extends Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.state = { collapse: true };
-  }
-
-  toggle() {
-    this.setState({ collapse: !this.state.collapse });
-  }
-
-  render() {
-    const filter = this.props.filter
-    return(
-      <Card className="w-100 rounded-0 text-left">
-        <Button onClick={this.toggle} color="link" block>
-          <CardHeader tag="h4" className="filter__label text-left">
-            {filter.label}
-          </CardHeader>
-        </Button>
-        <Collapse isOpen={this.state.collapse}>
-          <CardBody>
-            <OptionList options={filter.options}></OptionList>
-          </CardBody>
-        </Collapse>
-      </Card>
-    )
-  }
-}
-
-
-class OptionList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const options = this.props.options;
-
-    return(
-      options.map((option) => {
-        return(
-          <CustomInput type="checkbox" id={option.optionHandle} label={option.displayName}></CustomInput>
-        )
-      })
-    )
-
-  }
-}
-
 class App extends Component {
+
   render() {
+    const activeFilters = this.props.filters
     return (
       <div id="app" className="App">
         <Navbar color="light" light expand="md" className="justify-content-between">
@@ -188,11 +157,11 @@ class App extends Component {
         </Navbar>
         <div className="container-fluid">
           <div className="row flex-xl-nowrap">
-            <div className="col-12 col-sm-4 col-md-3 bd-sidebar px-0" style={{backgroundColor: "blue"}}>
+            <div className="col-12 col-sm-4 col-md-3 bd-sidebar px-0">
               <FilterList list={SEARCH_FILTERS} />
             </div>
-            <div className="col-12 col-sm-8 col-md-9" style={{backgroundColor: "green"}}>
-              <ItemList list={TEST_DATA} />
+            <div className="col-12 col-sm-8 col-md-9">
+              <ItemList list={TEST_DATA} activeFilters={activeFilters} />
             </div>
           </div>
         </div>
@@ -201,4 +170,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    filters: state.filters,
+  }
+}
+
+export default connect(mapStateToProps)(App);

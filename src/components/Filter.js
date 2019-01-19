@@ -1,0 +1,80 @@
+import { connect } from 'react-redux';
+import { updateFiltering } from './../actions';
+import React, { Component } from 'react';
+import { 
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Collapse
+ } from 'reactstrap';
+import OptionList from "./OptionList";
+
+class Filter extends Component {
+    constructor(props) {
+      super(props);
+  
+      this.handleOption = this.handleOption.bind(this);
+      this.toggle = this.toggle.bind(this);
+      this.state = { 
+        collapse: true,
+        activeOptions : []
+       };
+    }
+    
+    toggle() {
+        this.setState({ collapse: !this.state.collapse });
+    }
+    
+    handleOption(checked, option) {
+    
+      console.log(this.props.filter);
+      if(checked && !this.state.activeOptions.includes(option)) {
+        this.setState({
+          ...this.state,
+          activeOptions: this.state.activeOptions.concat(option)
+        }, () => this.props.updateFiltering(
+            this.props.filter.label, 
+            this.state.activeOptions)
+        )
+      }
+  
+      if(!checked && this.state.activeOptions.includes(option)) {
+        this.setState({
+          ...this.state,
+          activeOptions: this.state.activeOptions.filter(e => e !== option)
+        }, () => this.props.updateFiltering(
+            this.props.filter.label, 
+            this.state.activeOptions)
+        )
+      }
+      
+    }
+  
+    render() {
+      const filter = this.props.filter;
+      return(
+        <Card className="w-100 rounded-0 text-left">
+          <Button onClick={this.toggle} color="link" block>
+            <CardHeader tag="h4" className="filter__label text-left">
+              {filter.displayName}
+            </CardHeader>
+          </Button>
+          <Collapse isOpen={this.state.collapse}>
+            <CardBody>
+              <OptionList options={filter.options} handleOption={this.handleOption}></OptionList>
+            </CardBody>
+          </Collapse>
+        </Card>
+      )
+    }
+  }
+
+const mapStateToProps = (state) => {
+    return {
+        filters: state.filters,
+    }
+}
+  
+  
+  export default connect(mapStateToProps, { updateFiltering })(Filter);
