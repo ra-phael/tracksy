@@ -60,7 +60,7 @@ class Filter extends Component {
               {filter.displayName}
             </CardHeader>
           </Button>
-          <Collapse isOpen={this.state.collapse}>
+          <Collapse isOpen={this.state.collapse} className={this.state.collapse ? "filter__options-container--open" : ""}>
             <CardBody>
               <OptionList options={filter.options} handleOption={this.handleOption}></OptionList>
             </CardBody>

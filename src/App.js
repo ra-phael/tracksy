@@ -98,14 +98,14 @@ const TEST_FILTER = {
 
 
 const ItemCard = ({ item }) => (
-  <Card className="my-2">
+  <Card className="my-2 rounded-0">
     <div className="row align-items-center p-2">
       <div className="col-8 align-items-center text-left">
         <CardSubtitle>{ item.brandDisplayName }</CardSubtitle>
         <CardTitle tag="h5">{ item.name }</CardTitle>
       </div>
       <div className="col-4">
-        <Button>Create an alert</Button>
+        <Button className="rounded-0">Watch it</Button>
       </div>
     </div>
   </Card>
@@ -148,7 +148,10 @@ class App extends Component {
     return (
       <div id="app" className="App">
         <Navbar color="light" light expand="md" className="justify-content-between">
-          <NavbarBrand href="/">Tracksy</NavbarBrand>
+          <NavbarBrand tag={'h1'} href="/">
+            Tracksy
+          </NavbarBrand>
+            <span className="tagline">Track pre-loved luxury items prices</span>
           <Nav>
             <NavItem>
               <NavLink href="#">My Alerts</NavLink>
