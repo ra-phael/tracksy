@@ -105,33 +105,50 @@ const FilterList = ({ list }) =>
   </div>
 
 
-class App extends Component {
+const Header = () => 
+  <Navbar color="light" light expand="md" className="justify-content-between">
+    <NavbarBrand tag={'h1'} href="/">
+      Tracksy
+    </NavbarBrand>
+      <span className="tagline">Track pre-loved luxury items prices</span>
+    <Nav>
+      <NavItem>
+        <NavLink href="#">My Alerts</NavLink>
+      </NavItem>
+    </Nav>
+  </Navbar>
+
+
+class Home extends Component {
+
 
   render() {
     const activeFilters = this.props.filters
+
+    return(
+    <div className="container-fluid">
+      <div className="row flex-xl-nowrap">
+        <div className="col-12 col-sm-4 col-md-3 bd-sidebar px-0">
+          <FilterList list={SEARCH_FILTERS} />
+        </div>
+        <div className="col-12 col-sm-8 col-md-9">
+          <ItemList list={TEST_DATA} activeFilters={activeFilters} />
+        </div>
+      </div>
+    </div>
+    )
+  }
+}
+
+
+class App extends Component {
+
+  render() {
+    
     return (
       <div id="app" className="App">
-        <Navbar color="light" light expand="md" className="justify-content-between">
-          <NavbarBrand tag={'h1'} href="/">
-            Tracksy
-          </NavbarBrand>
-            <span className="tagline">Track pre-loved luxury items prices</span>
-          <Nav>
-            <NavItem>
-              <NavLink href="#">My Alerts</NavLink>
-            </NavItem>
-          </Nav>
-        </Navbar>
-        <div className="container-fluid">
-          <div className="row flex-xl-nowrap">
-            <div className="col-12 col-sm-4 col-md-3 bd-sidebar px-0">
-              <FilterList list={SEARCH_FILTERS} />
-            </div>
-            <div className="col-12 col-sm-8 col-md-9">
-              <ItemList list={TEST_DATA} activeFilters={activeFilters} />
-            </div>
-          </div>
-        </div>
+        <Header />
+        <Home filters={this.props.filters} />
       </div>
     );
   }
