@@ -77,4 +77,4 @@ const mapStateToProps = (state) => {
 }
   
   
-  export default connect(mapStateToProps, { updateFiltering })(Filter);
+export default connect(mapStateToProps, { updateFiltering })(Filter);
