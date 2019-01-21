@@ -13,7 +13,7 @@ const ItemCard = ({ item }) => (
           <CardSubtitle>{ item.brandDisplayName }</CardSubtitle>
           <CardTitle tag="h5">{ item.name }</CardTitle>
         </div>
-        <div className="col-4">
+        <div className="col-4 text-center">
           <Button className="rounded-0">Watch it</Button>
         </div>
       </div>

@@ -54,7 +54,7 @@ class Filter extends Component {
     render() {
       const filter = this.props.filter;
       return(
-        <Card className="w-100 rounded-0 text-left">
+        <Card className="w-100 rounded-0">
           <Button onClick={this.toggle} color="link" block>
             <CardHeader tag="h4" className="filter__label text-left">
               {filter.displayName}

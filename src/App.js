@@ -12,6 +12,7 @@ import {
 
 import Filter from './components/Filter';
 import ItemList from "./components/Items";
+import Login from './components/Login';
 
 const TEST_DATA = [
   {
@@ -147,10 +148,6 @@ class Home extends Component {
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     
     return (
@@ -163,6 +160,7 @@ class App extends Component {
             <Home {...routeProps} {...this.props} />
           )}
           />
+          <Route path="/login" component={Login} />
         </div>
       </Router>
     );
