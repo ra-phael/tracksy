@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import './App.sass';
 import { 
@@ -6,7 +7,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
+  NavLink as NavLien,
  } from 'reactstrap';
 
 import Filter from './components/Filter';
@@ -108,12 +109,15 @@ const FilterList = ({ list }) =>
 const Header = () => 
   <Navbar color="light" light expand="md" className="justify-content-between">
     <NavbarBrand tag={'h1'} href="/">
-      Tracksy
+      <NavLink to="/">Tracksy</NavLink>
     </NavbarBrand>
       <span className="tagline">Track pre-loved luxury items prices</span>
     <Nav>
       <NavItem>
-        <NavLink href="#">My Alerts</NavLink>
+        <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
+      </NavItem>
+      <NavItem>
+        <NavLien><NavLink to="/login">Log In</NavLink></NavLien>
       </NavItem>
     </Nav>
   </Navbar>
@@ -143,13 +147,24 @@ class Home extends Component {
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     
     return (
-      <div id="app" className="App">
-        <Header />
-        <Home filters={this.props.filters} />
-      </div>
+      <Router>
+        <div id="app" className="App">
+          <Header />
+          <Route
+          exact path="/"
+          render={(routeProps) => (
+            <Home {...routeProps} {...this.props} />
+          )}
+          />
+        </div>
+      </Router>
     );
   }
 }
