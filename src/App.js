@@ -118,7 +118,7 @@ const Header = () =>
         <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
       </NavItem>
       <NavItem>
-        <NavLien><NavLink to="/login">Log In</NavLink></NavLien>
+        <NavLien><NavLink to="/login">Log In / Sign Up</NavLink></NavLien>
       </NavItem>
     </Nav>
   </Navbar>
@@ -170,6 +170,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     filters: state.filters,
+    user: state.user,
+    isUserLoggedIn: state.isUserLoggedIn
   }
 }
 

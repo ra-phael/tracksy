@@ -4,3 +4,10 @@ export const updateFiltering = (filter, activeOptions) => (
         payload: {[filter] : activeOptions}
     }
 )
+
+export const loginSuccess = (user) => (
+    {
+        type: 'LOGIN_SUCCESS',
+        payload: user
+    }
+)
