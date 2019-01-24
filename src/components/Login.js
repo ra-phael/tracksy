@@ -47,8 +47,9 @@ class LoginComponent extends Component  {
 
         this.state = {
             isLogin: true,
-            question: '',
             email: '',
+            question: '',
+            answer: '',
             isEmailValid: null,
             errors: {
                 email: ''
@@ -69,6 +70,7 @@ class LoginComponent extends Component  {
     }
 
     validateEmail(email) {
+        // eslint-disable-next-line
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         if(!re.test(email)) {
@@ -125,25 +127,30 @@ class LoginComponent extends Component  {
                     this.props.history.push('/');
                 }
             }).catch(e => {
-                console.log('Received error:', e.response);
-                
-            })
-        }
-
-        signupCall(email, question, answer)
-            .then((user) => {
-                if(user) {
-                    console.log(user);
-                    this.props.loginSuccess(user);
-                    this.props.history.push('/');
-                }
-            }).catch(e => {
-                if(e.response.data.code && e.response.data.code === 11000) {
-                    this.setError('email', "Email address already exists")
+                if(e.response.data.code && e.response.data.code === 4000) {
+                    console.log('code 4000');
+                    this.setError('answer', 'Wrong email/answer combination')
                 } else {
                     console.log('Received error:', e.response);
                 }
             })
+        } else {
+            signupCall(email, question, answer)
+                .then((user) => {
+                    if(user) {
+                        console.log(user);
+                        this.props.loginSuccess(user);
+                        this.props.history.push('/');
+                    }
+                }).catch(e => {
+                    if(e.response.data.code && e.response.data.code === 11000) {
+                        this.setError('email', 'Email address already exists')
+                    } else {
+                        console.log('Received error:', e.response);
+                    }
+                })
+        }
+
     }
 
     setError(field, message) {
@@ -160,12 +167,16 @@ class LoginComponent extends Component  {
             <div>
                 <h2 className="text-center">{isLogin ? "Log In" : "Sign up"}</h2>
                 <div className="col-sm-12 col-md-6 offset-md-3">
-                    <Form autoComplete="off">
+                    <Form 
+                        autoComplete="off" 
+                        onSubmit={e => { e.preventDefault(); }}
+                    >
                         <FormGroup>
                             <Label for="email-input">Email</Label>
                             <Input type="email" name="email" id="email-input" required
                             placeholder="Your email address"
                             onChange={this.handleInputChange}
+                            
                             invalid={errors.email}
                             />
                             <FormFeedback>{errors.email}</FormFeedback>
@@ -187,7 +198,9 @@ class LoginComponent extends Component  {
                                 <Label for="answer-input">{this.state.question}</Label>
                                 <Input type="text" name="answer" id="answer-input"
                                 placeholder="Your answer" autoComplete="off"
-                                onChange={this.handleInputChange} />
+                                onChange={this.handleInputChange}
+                                invalid={errors.answer} />
+                                <FormFeedback>{errors.answer}</FormFeedback>
                             </FormGroup>
                             <div className="text-center">
                                 <Button onClick={this.onSubmit}>Submit</Button>
