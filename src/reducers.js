@@ -1,6 +1,13 @@
 
+const initialState = {
+    filters: [],
+    user: {
+      watchedItems: []
+    }
+  }
 
-const reducers = (state = {filters: [], user:{}}, action) => {
+const reducers = (state = initialState, action) => {
+    console.log("New action received:", action);
     switch(action.type) {
       case 'FILTER_UPDATE': 
         return { 
@@ -8,12 +15,26 @@ const reducers = (state = {filters: [], user:{}}, action) => {
             filters: Object.assign({}, state.filters, action.payload)
         }
       case 'LOGIN_SUCCESS':
-        console.log("[reducer] LOGIN_SUCCESS", action.payload);
         return {
           ...state,
           user: Object.assign({}, action.payload),
           isUserLoggedIn: true
         }
+      case 'LOGOUT_SUCCESS':
+        return {
+          ...state,
+          user: {},
+          isUserLoggedIn: false
+        }
+      case 'ITEM_TRACKING_ADD':
+        console.log('watchedItems', state.user.watchedItems);
+        return {
+          ...state,
+          user : {
+            ...state.user,
+            [state.user.watchedItems]: state.user.watchedItems.concat(action.payload)
+          }
+        } 
       default : return state;
     }
   }

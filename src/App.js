@@ -7,51 +7,16 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
+  Button,
   NavLink as NavLien,
  } from 'reactstrap';
 
 import Filter from './components/Filter';
 import ItemList from "./components/Items";
 import Login from './components/Login';
+import { getItems, logOutCall } from './services/api';
+import { logOut } from './actions';
 
-const TEST_DATA = [
-  {
-    brandDisplayName: 'Louis Vuitton',
-    brand: 'louis-vuitton',
-    name: 'Palms Springs Backpack',
-    category: 'hand-bags',
-  },
-  {
-    brandDisplayName: 'Louis Vuitton',
-    brand: 'louis-vuitton',
-    name: 'Montsouris Backpack',
-    category: 'hand-bags',
-  },
-  {
-    brandDisplayName: 'Chanel',
-    brand: 'chanel',
-    name: 'Jumbo Hand Bag',
-    category: 'hand-bags',
-  },
-  {
-    brandDisplayName: 'Chanel',
-    brand: 'chanel',
-    name: 'Camélia Necklace',
-    category: 'jewelry',
-  },
-  {
-    brandDisplayName: 'Hermès',
-    brand: 'hermes',
-    name: 'Clic Clac Bracelet',
-    category: 'jewelry',
-  },
-  {
-    brandDisplayName: 'Louboutin',
-    brand: 'louboutin',
-    name: 'Pigalle',
-    category: 'shoes',
-  }
-]
 
 const SEARCH_FILTERS = [
   {
@@ -90,11 +55,6 @@ const SEARCH_FILTERS = [
   ]},
 ]
 
-const TEST_FILTER = {
-  'category' : ['jewelry'],
-  'brandHandle' : []
-}
-
 
 const FilterList = ({ list }) =>
   <div id="accordion">
@@ -107,7 +67,7 @@ const FilterList = ({ list }) =>
   </div>
 
 
-const Header = () => 
+const Header = ({isUserLoggedIn, logOut}) => 
   <Navbar color="light" light expand="md" className="justify-content-between">
     <NavbarBrand tag={'h1'} href="/">
       <NavLink to="/">Tracksy</NavLink>
@@ -118,7 +78,10 @@ const Header = () =>
         <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
       </NavItem>
       <NavItem>
-        <NavLien><NavLink to="/login">Log In / Sign Up</NavLink></NavLien>
+        {isUserLoggedIn ?
+          <Button onClick={e => logOut()} color="link">Log Out</Button>
+        : <NavLien><NavLink to="/login">Log In / Sign Up</NavLink></NavLien>
+        }
       </NavItem>
     </Nav>
   </Navbar>
@@ -126,6 +89,22 @@ const Header = () =>
 
 class Home extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      items: []
+    };
+  }
+
+  componentWillMount() {
+    getItems()
+      .then(items => {
+        this.setState({items});
+      }).catch(err => {
+        console.log(err);
+      })
+  }
 
   render() {
     const activeFilters = this.props.filters
@@ -137,7 +116,7 @@ class Home extends Component {
           <FilterList list={SEARCH_FILTERS} />
         </div>
         <div className="col-12 col-sm-8 col-md-9">
-          <ItemList list={TEST_DATA} activeFilters={activeFilters} />
+          <ItemList list={this.state.items} activeFilters={activeFilters} />
         </div>
       </div>
     </div>
@@ -148,12 +127,26 @@ class Home extends Component {
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.onLogOut = this.onLogOut.bind(this);
+  }
+  
+  onLogOut(e) {
+    logOutCall(this.props.user.token)
+      .then((response) => {
+        if(response.status === 200) {
+          this.props.logOut();
+        }
+      }).catch(e => console.log(e));
+  }
+
   render() {
-    
     return (
       <Router>
         <div id="app" className="App">
-          <Header />
+          <Header logOut={this.onLogOut} isUserLoggedIn={this.props.isUserLoggedIn}/>
           <Route
           exact path="/"
           render={(routeProps) => (
@@ -175,4 +168,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { logOut })(App);

@@ -1,9 +1,9 @@
 import axios from "axios";
 
-
+const BASE_URL = 'http://localhost:8080';
 
 export const signupCall = (email, question, answer) => {
-    return axios.post("http://localhost:8080/users", {
+    return axios.post(BASE_URL + "/users", {
         email,
         security: {question, answer}
     }).then((response) => {
@@ -16,7 +16,7 @@ export const signupCall = (email, question, answer) => {
 }
 
 export const getQuestionCall = (email) => {
-    return axios.get("http://localhost:8080/users/question", {
+    return axios.get(BASE_URL + "/users/question", {
         params: {email: email}
     }).then((response) => {
         console.log(response);
@@ -28,7 +28,7 @@ export const getQuestionCall = (email) => {
 }
 
 export const loginCall = (email, answer) => {
-    return axios.post("http://localhost:8080/users/login", {
+    return axios.post(BASE_URL + "/users/login", {
         email,
         security: {
             answer
@@ -37,6 +37,27 @@ export const loginCall = (email, answer) => {
         const {_id, email} = response.data;
         const token = response.headers['x-auth'];
         return {_id, email, token};
+    }).catch((error) => {
+        console.log(error);
+        throw error;
+    })
+}
+
+export const logOutCall = (token) => {
+    return axios.delete(BASE_URL + "/users/me/token", {
+        headers: {'x-auth': token}
+    }).then((response) => {
+        console.log(response);
+        return response;
+    }).catch((error) => {
+        console.log(error);
+        throw error;
+    })
+}
+
+export const getItems = () => {
+    return axios.get(BASE_URL + "/items").then((response) => {
+        return response.data
     }).catch((error) => {
         console.log(error);
         throw error;
