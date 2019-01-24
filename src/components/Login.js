@@ -12,7 +12,7 @@ import {
     FormFeedback
    } from 'reactstrap';
 
-import { signupCall } from './../services/api';
+import { signupCall, getQuestionCall, loginCall } from './../services/api';
 import { loginSuccess } from "../actions";
 
 
@@ -41,11 +41,12 @@ const LoginHome = () =>
         </div>
     </div>
 
-class Signup extends Component  {
+class LoginComponent extends Component  {
     constructor(props) {
         super(props);
 
         this.state = {
+            isLogin: true,
             question: '',
             email: '',
             isEmailValid: null,
@@ -56,13 +57,50 @@ class Signup extends Component  {
         this.validateEmail = this.validateEmail.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.confirmEmail = this.confirmEmail.bind(this);
+        this.setError = this.setError.bind(this);
     }
 
-    validateEmail(e) {
+    componentWillMount() {
+        const currentPath = this.props.location.pathname;
+        if(currentPath === '/login/signup') {
+            this.setState({ isLogin: false });
+        }
+    }
+
+    validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-        if(!re.test(this.state.email)) {
-            this.setError('email', "Please enter a valid email address");
+        if(!re.test(email)) {
+            return false;
+        } else {
+           return true;
+        }
+    }
+
+    confirmEmail() {
+        const{ isLogin, email } = this.state;
+        if(!this.validateEmail(email)) {
+            this.setError('email', 'Please enter a valid email address');
+            return;
+        }
+        
+        if(isLogin) {
+            getQuestionCall(email)
+                .then(question => {
+                    console.log(question);
+                    this.setState({
+                        question: question,
+                        isEmailValid: true,
+                        errors: Object.assign({}, this.state.errors, {email: ''})
+                    })
+                })
+                .catch(e => {
+                    if(e.response.data.code && e.response.data.code === 4004) {
+                        this.setError('email', 'This email address is not registered')
+                    }
+                    console.log('Received error:', e.response);
+                })
         } else {
             this.setState({
                 isEmailValid: true,
@@ -76,7 +114,22 @@ class Signup extends Component  {
     }
 
     onSubmit() {
-        const {email, question, answer} = this.state;
+        const {email, question, answer, isLogin} = this.state;
+
+        if(isLogin) {
+            loginCall(email, answer)
+            .then((user) => {
+                if(user) {
+                    console.log(user);
+                    this.props.loginSuccess(user);
+                    this.props.history.push('/');
+                }
+            }).catch(e => {
+                console.log('Received error:', e.response);
+                
+            })
+        }
+
         signupCall(email, question, answer)
             .then((user) => {
                 if(user) {
@@ -102,10 +155,10 @@ class Signup extends Component  {
     }
 
     render() {
-        const {errors} = this.state;
+        const {isLogin, errors} = this.state;
         return(
             <div>
-                <h2 className="text-center">Sign up</h2>
+                <h2 className="text-center">{isLogin ? "Log In" : "Sign up"}</h2>
                 <div className="col-sm-12 col-md-6 offset-md-3">
                     <Form autoComplete="off">
                         <FormGroup>
@@ -119,13 +172,17 @@ class Signup extends Component  {
                         </FormGroup>
                         {this.state.isEmailValid ?
                         <div>
-                            <h5>Define a security question:</h5>
-                            <FormGroup>
-                                <Label for="question-input">Question</Label>
-                                <Input type="text" name="question" id="question-input"
-                                placeholder="Your question" onChange={this.handleInputChange} />
-                                <FormText>For example: What is your mother's maiden name?</FormText>
-                            </FormGroup>
+                            { !this.state.isLogin && 
+                            <div>
+                                <h5>Define a security question:</h5>
+                                <FormGroup>
+                                    <Label for="question-input">Question</Label>
+                                    <Input type="text" name="question" id="question-input"
+                                    placeholder="Your question" onChange={this.handleInputChange} />
+                                    <FormText>For example: What is your mother's maiden name?</FormText>
+                                </FormGroup>
+                            </div>
+                            }
                             <FormGroup>
                                 <Label for="answer-input">{this.state.question}</Label>
                                 <Input type="text" name="answer" id="answer-input"
@@ -138,13 +195,20 @@ class Signup extends Component  {
                         </div>
                         :   
                         <div className="text-center">
-                            <Button onClick={this.validateEmail}>Confirm</Button>
+                            <Button onClick={this.confirmEmail}>Confirm</Button>
                         </div>
                         }
                     </Form>
-                    <p>
-                        Already have an account? <Link to="/login">Log in</Link>
-                    </p>
+                    {
+                        isLogin ?
+                        <p>
+                            Don't have an account yet? <Link to="login/signup">Sign up</Link>
+                        </p>
+                        :
+                        <p>
+                            Already have an account? <Link to="/login">Log in</Link>
+                        </p>
+                    }
                 </div>
             </div>
         )
@@ -153,10 +217,10 @@ class Signup extends Component  {
 
 const Login = () =>
    <div>
-       <Route exact path="/login" component={LoginHome} />
-       <Route path="/login/signup" component={connectedSignup} />
+       <Route exact path="/login" component={connectedLogin} />
+       <Route path="/login/signup" component={connectedLogin} />
    </div>
 
 
-const connectedSignup = connect(null, { loginSuccess })(Signup);
+const connectedLogin = connect(null, { loginSuccess })(LoginComponent);
 export default Login;
