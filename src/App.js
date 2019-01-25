@@ -14,7 +14,7 @@ import {
 import Filter from './components/Filter';
 import ItemList from "./components/Items";
 import Login from './components/Login';
-import { getItems, logOutCall } from './services/api';
+import { getItemsCall, logOutCall } from './services/api';
 import { logOut } from './actions';
 
 
@@ -98,7 +98,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    getItems()
+    getItemsCall()
       .then(items => {
         this.setState({items});
       }).catch(err => {
@@ -107,7 +107,6 @@ class Home extends Component {
   }
 
   render() {
-    const activeFilters = this.props.filters
 
     return(
     <div className="container-fluid">
@@ -116,7 +115,7 @@ class Home extends Component {
           <FilterList list={SEARCH_FILTERS} />
         </div>
         <div className="col-12 col-sm-8 col-md-9">
-          <ItemList list={this.state.items} activeFilters={activeFilters} />
+          <ItemList list={this.state.items} />
         </div>
       </div>
     </div>
@@ -146,7 +145,7 @@ class App extends Component {
     return (
       <Router>
         <div id="app" className="App">
-          <Header logOut={this.onLogOut} isUserLoggedIn={this.props.isUserLoggedIn}/>
+          <Header logOut={this.onLogOut} isUserLoggedIn={this.props.user.isUserLoggedIn}/>
           <Route
           exact path="/"
           render={(routeProps) => (
@@ -162,9 +161,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    filters: state.filters,
     user: state.user,
-    isUserLoggedIn: state.isUserLoggedIn
   }
 }
 

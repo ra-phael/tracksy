@@ -16,31 +16,6 @@ import { signupCall, getQuestionCall, loginCall } from './../services/api';
 import { loginSuccess } from "../actions";
 
 
-const LoginHome = () =>
-    <div>
-        <h2 className="text-center">Login</h2>
-        <div className="col-sm-12 col-md-6 offset-md-3">
-            <Form>
-                <FormGroup>
-                    <Label for="email-input">Email</Label>
-                    <Input type="email" name="email" id="email-input"
-                     placeholder="Your email address" />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="password-input">What is your mother maiden name?</Label>
-                    <Input type="password" name="password" id="password-input"
-                     placeholder="Your answer" />
-                </FormGroup>
-                <div className="text-center">
-                    <Button>Submit</Button>
-                </div>
-            </Form>
-            <p>
-                Don't have an account yet? <Link to="login/signup">Sign up</Link>
-            </p>
-        </div>
-    </div>
-
 class LoginComponent extends Component  {
     constructor(props) {
         super(props);

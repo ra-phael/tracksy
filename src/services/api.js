@@ -55,11 +55,24 @@ export const logOutCall = (token) => {
     })
 }
 
-export const getItems = () => {
+export const getItemsCall = () => {
     return axios.get(BASE_URL + "/items").then((response) => {
         return response.data
     }).catch((error) => {
         console.log(error);
         throw error;
+    })
+}
+
+export const updateWatchedItemsCall = (token, itemId) => {
+    return axios.patch(BASE_URL + "/users/watcheditems",{
+        item: itemId
+    }, {
+        headers: {'x-auth': token}
+    }).then((response) => {
+        return response.data
+    }).catch((error) => {
+        console.log(error);
+        throw error
     })
 }
