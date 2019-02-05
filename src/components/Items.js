@@ -11,14 +11,14 @@ import { updateWatchedItemsCall } from '../services/api';
 
 
 const ItemCard = ({ item, handleItemClick, isWatched }) => (
-    <Card className="my-2 rounded-0">
+    <Card className="my-4 rounded-0 border-0 item-card">
       <div className="row align-items-center p-2">
         <div className="col-8 align-items-center text-left">
-          <CardSubtitle>{ item.brandDisplayName }</CardSubtitle>
-          <CardTitle tag="h5">{ item.name }</CardTitle>
+          <CardSubtitle className="item-card__brand">{ item.brandDisplayName }</CardSubtitle>
+          <CardTitle tag="h4" className="item-card__name">{ item.name }</CardTitle>
         </div>
         <div className="col-4 text-center">
-            <Button className="rounded-0"
+            <Button outline color="dark" className={"rounded-0 " + (isWatched ? "button-watched" : "")}
             onClick={e => handleItemClick(item._id)}>
                 {isWatched ? "Watched" : "Watch it"}
             </Button>
@@ -68,7 +68,7 @@ class ItemList extends Component {
 
             })
             .map( item => {
-                let isWatched = this.props.user.watchedItems.includes(item._id);
+                let isWatched = this.props.user.watchedItems.some(el => el._id === item._id);
                 return <ItemCard item={item} handleItemClick={this.handleItemClick} isWatched={isWatched}/>
             })
         )

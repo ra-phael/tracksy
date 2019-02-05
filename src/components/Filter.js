@@ -17,9 +17,13 @@ class Filter extends Component {
       this.handleOption = this.handleOption.bind(this);
       this.toggle = this.toggle.bind(this);
       this.state = { 
-        collapse: true,
         activeOptions : []
        };
+      if(window.innerWidth < 576) {
+        this.state.collapse = false;
+      } else {
+        this.state.collapse = true;
+      }
     }
     
     toggle() {
@@ -54,9 +58,9 @@ class Filter extends Component {
     render() {
       const filter = this.props.filter;
       return(
-        <Card className="w-100 rounded-0">
+        <Card className="w-100 rounded-0 filter-container border-0">
           <Button onClick={this.toggle} color="link" block>
-            <CardHeader tag="h4" className="filter__label text-left">
+            <CardHeader tag="h5" className="filter__label text-left">
               {filter.displayName}
             </CardHeader>
           </Button>

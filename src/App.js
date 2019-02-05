@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
-import './App.sass';
+import './stylesheets/App.sass';
 import { 
   Navbar,
   NavbarBrand,
@@ -51,6 +51,10 @@ const SEARCH_FILTERS = [
     {
       displayName: 'Chanel',
       option: 'chanel'
+    },
+    {
+      displayName: 'Cartier',
+      option: 'cartier'
     }
   ]},
 ]
@@ -68,12 +72,14 @@ const FilterList = ({ list }) =>
 
 
 const Header = ({isUserLoggedIn, logOut}) => 
-  <Navbar color="light" light expand="md" className="justify-content-between">
-    <NavbarBrand tag={'h1'} href="/">
-      <NavLink to="/">Tracksy</NavLink>
-    </NavbarBrand>
-      <span className="tagline">Track pre-loved luxury items prices</span>
-    <Nav>
+  <Navbar light expand="md" className="justify-content-between">
+    <div className="col-12 col-sm-2 text-center">
+      <NavbarBrand tag={'h1'} href="/">
+        <NavLink to="/" className="main-logo">Tracksy</NavLink>
+      </NavbarBrand>
+    </div>
+      {/* <span className="tagline">Track pre-loved luxury items prices</span> */}
+    <Nav className="col-12 col-sm-6 justify-content-center justify-content-sm-end">
       <NavItem>
         <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
       </NavItem>
@@ -100,8 +106,13 @@ class Home extends Component {
   componentWillMount() {
     getItemsCall()
       .then(items => {
-        this.setState({items});
+        console.log("items:", items);
+        this.setState({items: items});
       }).catch(err => {
+        if(err.message.includes("Network Error")) {
+          // TODO: Display sth in UI
+          console.log("Unable to establish a connection with our server");
+        }
         console.log(err);
       })
   }
@@ -109,7 +120,7 @@ class Home extends Component {
   render() {
 
     return(
-    <div className="container-fluid">
+    <div className="container-fluid main-container">
       <div className="row flex-xl-nowrap">
         <div className="col-12 col-sm-4 col-md-3 bd-sidebar px-0">
           <FilterList list={SEARCH_FILTERS} />

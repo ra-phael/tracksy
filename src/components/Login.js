@@ -141,7 +141,7 @@ class LoginComponent extends Component  {
         return(
             <div>
                 <h2 className="text-center">{isLogin ? "Log In" : "Sign up"}</h2>
-                <div className="col-sm-12 col-md-6 offset-md-3">
+                <div className="col -12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
                     <Form 
                         autoComplete="off" 
                         onSubmit={e => { e.preventDefault(); }}
@@ -178,12 +178,12 @@ class LoginComponent extends Component  {
                                 <FormFeedback>{errors.answer}</FormFeedback>
                             </FormGroup>
                             <div className="text-center">
-                                <Button onClick={this.onSubmit}>Submit</Button>
+                                <Button outline color="dark" className="rounded-0" onClick={this.onSubmit}>Submit</Button>
                             </div>
                         </div>
                         :   
                         <div className="text-center">
-                            <Button onClick={this.confirmEmail}>Confirm</Button>
+                            <Button outline color="dark" className="rounded-0" onClick={this.confirmEmail}>Confirm</Button>
                         </div>
                         }
                     </Form>
@@ -204,7 +204,7 @@ class LoginComponent extends Component  {
 }
 
 const Login = () =>
-   <div>
+   <div className="login-container pt-4">
        <Route exact path="/login" component={connectedLogin} />
        <Route path="/login/signup" component={connectedLogin} />
    </div>

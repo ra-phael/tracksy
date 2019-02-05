@@ -1,0 +1,57 @@
+@import "~bootstrap/scss/bootstrap"
+@import "variables"
+
+html
+    height: 100vh
+html, .main-container, .filter-container, .login-container
+    background-color: $light
+#app
+    font-family: $main-font
+
+    a
+        color: inherit
+        &:hover
+            text-decoration: none
+            font-weight: 600
+    .main-logo
+        font-family: $logo-font
+        font-size: 1.5rem
+        &:hover
+            font-weight: 500
+
+    .btn-link
+        color: $link-color
+        &:hover, &:focus
+            text-decoration: none
+
+    .button-watched
+        background-color: $dark
+        color: #fff
+        border-color: $dark
+
+    .tagline
+        display: inline
+
+    .filter__label
+        border-bottom: 0
+        background-color: transparent
+        color: $t-blue-darker
+        font:
+            family: $secondary-font
+            size: 1.5rem
+    
+    .filter__options-container--open
+        max-height: 200px
+        overflow: auto
+
+    .item-card
+        &__brand
+            font:
+                size: 1rem
+                weight: bold
+            text-transform: uppercase
+        &__name
+            font-size: 1.4rem
+
+    .filter-container + .filter-container
+        border-top: none

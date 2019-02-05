@@ -34,9 +34,9 @@ export const loginCall = (email, answer) => {
             answer
         }
     }).then((response) => {
-        const {_id, email} = response.data;
+        const {_id, email, watchedItems} = response.data;
         const token = response.headers['x-auth'];
-        return {_id, email, token};
+        return {_id, email, watchedItems, token};
     }).catch((error) => {
         console.log(error);
         throw error;
@@ -66,7 +66,9 @@ export const getItemsCall = () => {
 
 export const updateWatchedItemsCall = (token, itemId) => {
     return axios.patch(BASE_URL + "/users/watcheditems",{
-        item: itemId
+        item: {
+            _id: itemId
+        }
     }, {
         headers: {'x-auth': token}
     }).then((response) => {
