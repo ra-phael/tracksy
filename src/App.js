@@ -73,13 +73,15 @@ const FilterList = ({ list }) =>
 
 const Header = ({isUserLoggedIn, logOut}) => 
   <Navbar light expand="md" className="justify-content-between">
-    <div className="col-12 col-sm-2 text-center">
+    <div className="col-12 col-sm text-sm-left text-center">
       <NavbarBrand tag={'h1'} href="/">
         <NavLink to="/" className="main-logo">Tracksy</NavLink>
       </NavbarBrand>
     </div>
-      {/* <span className="tagline">Track pre-loved luxury items prices</span> */}
-    <Nav className="col-12 col-sm-6 justify-content-center justify-content-sm-end">
+    <div className="col-12 col-sm text-center tagline">
+      Track pre-loved luxury items prices
+    </div>
+    <Nav className="col-12 col-sm justify-content-center justify-content-sm-end">
       <NavItem>
         <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
       </NavItem>
