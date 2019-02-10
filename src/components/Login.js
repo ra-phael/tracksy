@@ -65,7 +65,7 @@ class LoginComponent extends Component  {
         if(isLogin) {
             getQuestionCall(email)
                 .then(question => {
-                    console.log(question);
+                    // console.log(question);
                     this.setState({
                         question: question,
                         isEmailValid: true,
@@ -97,13 +97,12 @@ class LoginComponent extends Component  {
             loginCall(email, answer)
             .then((user) => {
                 if(user) {
-                    console.log(user);
+                    // console.log(user);
                     this.props.loginSuccess(user);
                     this.props.history.push('/');
                 }
             }).catch(e => {
                 if(e.response.data.code && e.response.data.code === 4000) {
-                    console.log('code 4000');
                     this.setError('answer', 'Wrong email/answer combination')
                 } else {
                     console.log('Received error:', e.response);
@@ -113,7 +112,7 @@ class LoginComponent extends Component  {
             signupCall(email, question, answer)
                 .then((user) => {
                     if(user) {
-                        console.log(user);
+                        // console.log(user);
                         this.props.loginSuccess(user);
                         this.props.history.push('/');
                     }

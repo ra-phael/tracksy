@@ -19,7 +19,7 @@ export const getQuestionCall = (email) => {
     return axios.get(BASE_URL + "/users/question", {
         params: {email: email}
     }).then((response) => {
-        console.log(response);
+        // console.log(response);
         return response.data.question;
     }).catch((error) => {
         console.log(error);
@@ -47,7 +47,7 @@ export const logOutCall = (token) => {
     return axios.delete(BASE_URL + "/users/me/token", {
         headers: {'x-auth': token}
     }).then((response) => {
-        console.log(response);
+        // console.log(response);
         return response;
     }).catch((error) => {
         console.log(error);

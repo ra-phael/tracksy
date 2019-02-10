@@ -43,7 +43,7 @@ class ItemList extends Component {
         }
         updateWatchedItemsCall(this.props.user.token, id)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 this.props.updateWatchedItems(res.watchedItems)
             })
             .catch(e => console.log("Error updating watched items", e))

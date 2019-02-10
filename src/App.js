@@ -75,7 +75,7 @@ const Header = ({isUserLoggedIn, logOut}) =>
   <Navbar light expand="md" className="justify-content-between">
     <div className="col-12 col-sm text-sm-left text-center">
       <NavbarBrand tag={'h1'} href="/">
-        <NavLink to="/" className="main-logo">Tracksy</NavLink>
+        <NavLink to="/" className="main-logo">Tracksy<sup>Beta</sup></NavLink>
       </NavbarBrand>
     </div>
     <div className="col-12 col-sm text-center tagline">
@@ -101,19 +101,21 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      items: []
+      items: [],
+      error: {
+        message: ''
+      }
     };
   }
 
   componentWillMount() {
     getItemsCall()
       .then(items => {
-        console.log("items:", items);
+        // console.log("items:", items);
         this.setState({items: items});
       }).catch(err => {
         if(err.message.includes("Network Error")) {
-          // TODO: Display sth in UI
-          console.log("Unable to establish a connection with our server");
+          this.setState({error: {message: 'Oh no! Sorry, something went wrong. Our server cannot be reached at the moment.'}})
         }
         console.log(err);
       })
@@ -129,6 +131,7 @@ class Home extends Component {
         </div>
         <div className="col-12 col-sm-8 col-md-9">
           <ItemList list={this.state.items} />
+          {this.state.error.message && <p>{this.state.error.message}</p>}
         </div>
       </div>
     </div>

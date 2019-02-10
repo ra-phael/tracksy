@@ -32,7 +32,7 @@ class Filter extends Component {
     
     handleOption(checked, option) {
     
-      console.log(this.props.filter);
+      // console.log(this.props.filter);
       if(checked && !this.state.activeOptions.includes(option)) {
         this.setState({
           ...this.state,

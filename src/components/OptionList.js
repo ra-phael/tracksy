@@ -9,7 +9,6 @@ class OptionList extends Component {
     }
   
     toggleCheckbox = (e) => {
-        console.log('chekbox toggled');
       this.props.handleOption(e.target.checked, e.target.id);
     }
   
