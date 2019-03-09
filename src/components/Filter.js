@@ -60,12 +60,12 @@ class Filter extends Component {
       return(
         <Card className="w-100 rounded-0 filter-container border-0">
           <Button onClick={this.toggle} color="link" block>
-            <CardHeader tag="h5" className="filter__label text-left">
+            <CardHeader tag="h5" className="filter__label text-left pl-2">
               {filter.displayName}
             </CardHeader>
           </Button>
           <Collapse isOpen={this.state.collapse} className={this.state.collapse ? "filter__options-container--open" : ""}>
-            <CardBody>
+            <CardBody className="pt-0">
               <OptionList options={filter.options} handleOption={this.handleOption}></OptionList>
             </CardBody>
           </Collapse>
