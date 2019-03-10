@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080';
+// const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://tracksyback.herokuapp.com';
 
 export const signupCall = (email, question, answer) => {
     return axios.post(BASE_URL + "/users", {
