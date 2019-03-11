@@ -30,7 +30,7 @@ html, .main-container, .filter-container, .login-container
 
     .btn-outline-dark:focus
       box-shadow: none
-      
+
     .button-watched
         background-color: $dark
         color: #fff
@@ -52,6 +52,10 @@ html, .main-container, .filter-container, .login-container
         max-height: 200px
         overflow: auto
 
+    .option-list__item
+      > input:checked ~ label::before
+          background-color: $yellow
+          border-color: $yellow
     .item-card
         box-shadow: 1px 2px 12px 0px #00000014
         &__brand
