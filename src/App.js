@@ -71,7 +71,7 @@ const FilterList = ({ list }) =>
   </div>
 
 
-const Header = ({isUserLoggedIn, logOut}) => 
+const Header = ({logOut, isUserLoggedIn}) => 
   <Navbar light expand="md" className="justify-content-between">
     <div className="col-12 col-sm text-sm-left text-center">
       <NavbarBrand tag={'h1'} href="/">
@@ -83,7 +83,11 @@ const Header = ({isUserLoggedIn, logOut}) =>
     </div>
     <Nav className="col-12 col-sm justify-content-center justify-content-sm-end">
       <NavItem>
-        <NavLien><NavLink to="#">My Alerts</NavLink></NavLien>
+        <NavLien>
+          <NavLink to={isUserLoggedIn ? "#" : "/login/signup"}>
+            My Alerts
+          </NavLink>
+        </NavLien>
       </NavItem>
       <NavItem>
         {isUserLoggedIn ?
