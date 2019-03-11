@@ -38,16 +38,16 @@ class ItemList extends Component {
     }
 
     handleItemClick(id) {
-        if(!this.props.user.isLoggedIn) {
-            this.props.history.push('/login/signup');
+        if(!this.props.user.isUserLoggedIn) {
+          this.props.history.push('/login/signup');
+        } else {
+          updateWatchedItemsCall(this.props.user.token, id)
+              .then((res) => {
+                  // console.log(res);
+                  this.props.updateWatchedItems(res.watchedItems)
+              })
+              .catch(e => console.log("Error updating watched items", e))
         }
-        updateWatchedItemsCall(this.props.user.token, id)
-            .then((res) => {
-                // console.log(res);
-                this.props.updateWatchedItems(res.watchedItems)
-            })
-            .catch(e => console.log("Error updating watched items", e))
-
     }
 
     render() {
@@ -82,4 +82,4 @@ const mapStateToProps = (state) => {
     }
   }
 
-export default withRouter(connect(mapStateToProps, { updateWatchedItems })(ItemList));
+export default connect(mapStateToProps, { updateWatchedItems })(withRouter(ItemList));
