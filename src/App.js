@@ -9,10 +9,15 @@ import {
   NavItem,
   Button,
   NavLink as NavLien,
+  Modal,
+  ModalHeader,
+  ModalBody,
  } from 'reactstrap';
 
 import Filter from './components/Filter';
 import ItemList from "./components/Items";
+import { SpecialItemCard } from "./components/Items";
+import ItemForm from './components/ItemForm';
 import Login from './components/Login';
 import { getItemsCall, logOutCall } from './services/api';
 import { logOut } from './actions';
@@ -105,11 +110,13 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      modal: false,
       items: [],
       error: {
         message: ''
       }
     };
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentWillMount() {
@@ -125,6 +132,12 @@ class Home extends Component {
       })
   }
 
+  toggleModal() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+
   render() {
 
     return(
@@ -135,7 +148,17 @@ class Home extends Component {
         </div>
         <div className="col-12 col-sm-8 col-md-9">
           <ItemList list={this.state.items} />
+          <SpecialItemCard 
+            mainText="Want to track another item? We'll add it for you!"
+            buttonText="Let us know"
+            onClick={this.toggleModal}/>
           {this.state.error.message && <p>{this.state.error.message}</p>}
+          <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+            <ModalHeader toggle={this.toggleModal}>Request for an item to be added</ModalHeader>
+            <ModalBody>
+              <ItemForm></ItemForm>
+            </ModalBody>
+          </Modal>
         </div>
       </div>
     </div>

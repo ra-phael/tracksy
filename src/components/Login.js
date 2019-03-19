@@ -10,7 +10,7 @@ import {
     Button,
     FormText,
     FormFeedback
-   } from 'reactstrap';
+  } from 'reactstrap';
 
 import { signupCall, getQuestionCall, loginCall } from './../services/api';
 import { loginSuccess } from "../actions";

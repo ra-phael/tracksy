@@ -2,9 +2,9 @@ import axios from "axios";
 let env = process.env.NODE_ENV || 'development'
 let BASE_URL = 'https://tracksyback.herokuapp.com';
 
-if (env === 'development' || env === 'test') {
-  BASE_URL = 'http://localhost:8080';
-}
+// if (env === 'development' || env === 'test') {
+//   BASE_URL = 'http://localhost:8080';
+// }
 
 export const signupCall = (email, question, answer) => {
     return axios.post(BASE_URL + "/users", {

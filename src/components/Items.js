@@ -26,16 +26,30 @@ const ItemCard = ({ item, handleItemClick, isWatched }) => (
         </div>
       </div>
     </Card>
-  );
-  
+);
+
+export const SpecialItemCard = ({mainText, buttonText, onClick}) => (
+    <Card className="my-4 rounded-0 border-0 item-card">
+      <div className="row align-items-center p-2">
+        <div className="col-8 align-items-center text-left">
+          <CardTitle tag="h4" className="item-card__name mb-0">{ mainText }</CardTitle>
+        </div>
+        <div className="col-4 text-center">
+            <Button outline color="dark" className="rounded-0 "
+            onClick={e => onClick(e)}>
+                { buttonText }
+            </Button>
+        </div>
+      </div>
+    </Card>
+);
   
 class ItemList extends Component {
+  constructor(props) {
+      super(props);
 
-    constructor(props) {
-        super(props);
-
-        this.handleItemClick = this.handleItemClick.bind(this);
-    }
+      this.handleItemClick = this.handleItemClick.bind(this);
+  }
 
     handleItemClick(id) {
         if(!this.props.user.isUserLoggedIn) {
@@ -50,36 +64,36 @@ class ItemList extends Component {
         }
     }
 
-    render() {
-        const activeFilters = this.props.filters;
-        return(
-            this.props.list
-            .filter((item) => {
-                
-                return Object.keys(activeFilters).every(filter => {
+  render() {
+      const activeFilters = this.props.filters;
+      return(
+          this.props.list
+          .filter((item) => {
+              
+              return Object.keys(activeFilters).every(filter => {
 
-                    if(!activeFilters[filter].length) {
-                        return true
-                    }
-                    // console.log(`${item.name} is evaluated against ${TEST_FILTER[filter]}`);
-                    // console.log('evaluation: ', TEST_FILTER[filter].includes(item[filter]));
-                    return activeFilters[filter].includes(item[filter])
-                })
+                  if(!activeFilters[filter].length) {
+                      return true
+                  }
+                  return activeFilters[filter].includes(item[filter])
+              })
 
-            })
-            .map( item => {
-                let isWatched = this.props.user.watchedItems.some(el => el._id === item._id);
-                return <ItemCard item={item} handleItemClick={this.handleItemClick} isWatched={isWatched}/>
-            })
-        )
-    }
+          })
+          .map( item => {
+              let isWatched = this.props.user.watchedItems
+                .some(el => el._id === item._id);
+              return <ItemCard item={item}
+               handleItemClick={this.handleItemClick} isWatched={isWatched}/>
+          })
+      )
+  }
 }
 
 const mapStateToProps = (state) => {
-    return {
-      filters: state.filters,
-      user: state.user,
-    }
+  return {
+    filters: state.filters,
+    user: state.user,
   }
+}
 
 export default connect(mapStateToProps, { updateWatchedItems })(withRouter(ItemList));
