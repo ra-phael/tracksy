@@ -28,6 +28,9 @@ html, .main-container, .filter-container, .login-container
         &:hover, &:focus
             text-decoration: none
 
+    .btn-outline-dark:focus
+      box-shadow: none
+
     .button-watched
         background-color: $dark
         color: #fff
@@ -49,8 +52,17 @@ html, .main-container, .filter-container, .login-container
         max-height: 200px
         overflow: auto
 
+    .option-list__item
+      > input:checked ~ label::before
+        background-color: $yellow
+        border-color: $yellow
+    .custom-control-input:focus ~ .custom-control-label::before 
+      box-shadow:none !important
+      border-color: $yellow
+
     .item-card
         box-shadow: 1px 2px 12px 0px #00000014
+        max-width: 100rem
         &__brand
             font:
                 family: $tertiary-font

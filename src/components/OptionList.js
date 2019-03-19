@@ -18,7 +18,10 @@ class OptionList extends Component {
       return(
         options.map((option) => {
           return(
-            <CustomInput type="checkbox" onChange={ this.toggleCheckbox } id={option.option} label={option.displayName}></CustomInput>
+            <CustomInput type="checkbox" onChange={ this.toggleCheckbox }
+              id={option.option} label={option.displayName}
+              className="option-list__item">
+            </CustomInput>
           )
         })
       )

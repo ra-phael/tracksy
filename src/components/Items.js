@@ -6,6 +6,7 @@ import {
     CardSubtitle,
    } from 'reactstrap';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
 import { updateWatchedItems } from './../actions';
 import { updateWatchedItemsCall } from '../services/api';
 
@@ -37,17 +38,16 @@ class ItemList extends Component {
     }
 
     handleItemClick(id) {
-        if(!this.props.user.isLoggedIn) {
-            // TODO
-            console.log("Show pop-up to ask to login or sign up");
+        if(!this.props.user.isUserLoggedIn) {
+          this.props.history.push('/login/signup');
+        } else {
+          updateWatchedItemsCall(this.props.user.token, id)
+              .then((res) => {
+                  // console.log(res);
+                  this.props.updateWatchedItems(res.watchedItems)
+              })
+              .catch(e => console.log("Error updating watched items", e))
         }
-        updateWatchedItemsCall(this.props.user.token, id)
-            .then((res) => {
-                // console.log(res);
-                this.props.updateWatchedItems(res.watchedItems)
-            })
-            .catch(e => console.log("Error updating watched items", e))
-
     }
 
     render() {
@@ -82,4 +82,4 @@ const mapStateToProps = (state) => {
     }
   }
 
-export default connect(mapStateToProps, { updateWatchedItems })(ItemList);
+export default connect(mapStateToProps, { updateWatchedItems })(withRouter(ItemList));
